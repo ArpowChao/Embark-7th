@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>✨ 第七屆專題籌備委員會招募報名系統 ✨</title>
+
+  <!-- Google Fonts: 圓潤溫馨字體 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700;900&family=Noto+Sans+TC:wght@400;500;700;900&display=swap"
+    rel="stylesheet">
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Canvas Confetti 彩花特效 -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <!-- 背景飄浮可愛裝飾元素 -->
+  <div class="floating-decorations" aria-hidden="true">
+    <span class="bubble b1">🌟</span>
+    <span class="bubble b2">🎈</span>
+    <span class="bubble b3">✨</span>
+    <span class="bubble b4">🍀</span>
+    <span class="bubble b5">🎨</span>
+    <span class="bubble b6">🌻</span>
+    <span class="bubble b7">💖</span>
+  </div>
+
+  <div class="container">
+    <!-- 頂部標題與介紹橫幅 -->
+    <header class="hero-header">
+      <div class="badge-pill">
+        <span class="badge-icon">🚀</span> 7th Project Committee
+      </div>
+      <h1 class="main-title">
+        第七屆專題籌備委員會
+        <span class="sub-title">💛 組長 & 組員熱烈招募中 💛</span>
+      </h1>
+      <p class="hero-desc">
+        嘿！想要讓你的校園回憶充滿火花與成就感嗎？<br>
+        加入第七屆籌委會，一起策劃最棒的專題展覽！這裡有滿滿的溫暖、夥伴與挑戰等著你 🌱
+      </p>
+
+      <!-- 快捷重要時程提示卡片 -->
+      <div class="timeline-quickview">
+        <div class="timeline-item">
+          <div class="t-icon">📝</div>
+          <div class="t-text">
+            <strong>招募報名</strong>
+            <span>即日起開放填寫</span>
+          </div>
+        </div>
+        <div class="timeline-arrow">➜</div>
+        <div class="timeline-item">
+          <div class="t-icon">🎙️</div>
+          <div class="t-text">
+            <strong>組長/組員面試</strong>
+            <span>時段預約調查</span>
+          </div>
+        </div>
+        <div class="timeline-arrow">➜</div>
+        <div class="timeline-item">
+          <div class="t-icon">🎓</div>
+          <div class="t-text">
+            <strong>10~11月 培訓期</strong>
+            <span>平日中午 / 自主學習時間</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- 頁面功能切換 Tabs -->
+    <nav class="mode-tabs">
+      <button type="button" class="tab-btn active" id="tab-apply" onclick="switchMode('apply')">
+        <i class="fa-solid fa-pen-nib"></i> 我要報名 / 填寫表單
+      </button>
+      <button type="button" class="tab-btn" id="tab-query" onclick="switchMode('query')">
+        <i class="fa-solid fa-magnifying-glass"></i> 查詢 / 修改已填資料
+      </button>
+      <button type="button" class="tab-btn" id="tab-info" onclick="switchMode('info')">
+        <i class="fa-solid fa-heart"></i> 八大組別介紹
+      </button>
+    </nav>
+
+    <!-- 修改狀態提示列 (預設隱藏) -->
+    <div id="edit-notice-banner" class="edit-banner hidden">
+      <div class="edit-banner-content">
+        <span class="edit-badge">✏️ 正在修改資料模式</span>
+        <span id="edit-user-info">班級：- | 座號：- | 姓名：-</span>
+      </div>
+      <button type="button" class="cancel-edit-btn" onclick="cancelEditMode()">
+        <i class="fa-solid fa-xmark"></i> 取消修改 / 回全新報名
+      </button>
+    </div>
+
+    <!-- 區塊 1: 查詢與修改身分驗證區 (僅在 query mode 或需要時顯示) -->
+    <section id="query-section" class="card query-card hidden">
+      <div class="card-header">
+        <div class="card-title-group">
+          <span class="card-icon">🔍</span>
+          <h2>查詢或修改您的報名表</h2>
+        </div>
+        <p class="card-subtitle">請輸入當初報名時填寫的「班級、座號、姓名」，系統將自動為您帶出填寫紀錄！</p>
+      </div>
+
+      <form id="query-form" onsubmit="handleQuerySubmit(event)" class="form-grid-3" autocomplete="off">
+        <div class="form-group">
+          <label for="q-class"><i class="fa-solid fa-school"></i> 班級 <span class="req">*</span></label>
+          <select id="q-class" required onchange="onClassSelectChange('q')">
+            <option value="" disabled selected>請選擇班級</option>
+            <optgroup label="🌱 高一 (101~112)">
+              <option value="101">101</option>
+              <option value="102">102</option>
+              <option value="103">103</option>
+              <option value="104">104</option>
+              <option value="105">105</option>
+              <option value="106">106</option>
+              <option value="107">107</option>
+              <option value="108">108</option>
+              <option value="109">109</option>
+              <option value="110">110</option>
+              <option value="111">111</option>
+              <option value="112">112</option>
+            </optgroup>
+            <optgroup label="🌟 高二 (201~212)">
+              <option value="201">201</option>
+              <option value="202">202</option>
+              <option value="203">203</option>
+              <option value="204">204</option>
+              <option value="205">205</option>
+              <option value="206">206</option>
+              <option value="207">207</option>
+              <option value="208">208</option>
+              <option value="209">209</option>
+              <option value="210">210</option>
+              <option value="211">211</option>
+              <option value="212">212</option>
+            </optgroup>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="q-seat"><i class="fa-solid fa-hashtag"></i> 座號 <span class="req">*</span></label>
+          <select id="q-seat" required onchange="onSeatSelectChange('q')">
+            <option value="" disabled selected>請先選擇班級</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="q-name"><i class="fa-solid fa-user"></i> 姓名 <span class="req">*</span></label>
+          <input type="text" id="q-name" placeholder="請填入真實姓名" autocomplete="off" required
+            oninput="onNameInputChange('q')">
+          <div id="q-name-feedback" class="name-verify-feedback hidden"></div>
+        </div>
+        <div class="form-submit-full">
+          <button type="submit" class="btn btn-search" id="btn-query">
+            <i class="fa-solid fa-magnifying-glass"></i> 開始查詢我的報名紀錄
+          </button>
+        </div>
+      </form>
+
+      <!-- 查詢頁面的 LINE 社群提醒 -->
+      <div class="query-line-box">
+        <div class="query-line-text">
+          <i class="fa-brands fa-line line-icon-lg"></i>
+          <div>
+            <strong>尚未加入官方聯絡群組嗎？</strong>
+            <p>報名請務必加入「7th 專題籌備委員會」LINE 社群，方便後續通知面試時段與籌備聯絡！</p>
+          </div>
+        </div>
+        <div class="query-line-actions">
+          <a href="https://line.me/ti/g2/el2z3XrT-3KD_LqV-qiLxFGWi6q7VnfdjmQWag?utm_source=invitation&utm_medium=link_copy&utm_campaign=default"
+            target="_blank" rel="noopener noreferrer" class="btn btn-line-sm">
+            <i class="fa-brands fa-line"></i> 立即加入
+          </a>
+          <button type="button" class="btn btn-copy-sm" onclick="copyLineInviteUrl()">
+            <i class="fa-regular fa-copy"></i> 複製連結
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 區塊 2: 報名表單本體 (新增 / 修改 共用) -->
+    <section id="form-section" class="form-container">
+      <form id="recruitment-form" onsubmit="handleFormSubmit(event)" autocomplete="off">
+
+        <!-- Step 1: 基本個人資料 -->
+        <div class="card form-step-card">
+          <div class="card-header">
+            <div class="card-title-group">
+              <span class="step-num">Step 1</span>
+              <h2>基本身分資料</h2>
+            </div>
+            <p class="card-subtitle">讓我們認識你！請務必確認聯絡資料填寫無誤唷 🐾</p>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="f-class"><i class="fa-solid fa-school"></i> 班級 <span class="req">*</span></label>
+              <select id="f-class" name="class" required onchange="onClassSelectChange('f')">
+                <option value="" disabled selected>請選擇班級</option>
+                <optgroup label="🌱 高一 (101~112)">
+                  <option value="101">101</option>
+                  <option value="102">102</option>
+                  <option value="103">103</option>
+                  <option value="104">104</option>
+                  <option value="105">105</option>
+                  <option value="106">106</option>
+                  <option value="107">107</option>
+                  <option value="108">108</option>
+                  <option value="109">109</option>
+                  <option value="110">110</option>
+                  <option value="111">111</option>
+                  <option value="112">112</option>
+                </optgroup>
+                <optgroup label="🌟 高二 (201~212)">
+                  <option value="201">201</option>
+                  <option value="202">202</option>
+                  <option value="203">203</option>
+                  <option value="204">204</option>
+                  <option value="205">205</option>
+                  <option value="206">206</option>
+                  <option value="207">207</option>
+                  <option value="208">208</option>
+                  <option value="209">209</option>
+                  <option value="210">210</option>
+                  <option value="211">211</option>
+                  <option value="212">212</option>
+                </optgroup>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="f-seat"><i class="fa-solid fa-hashtag"></i> 座號 <span class="req">*</span></label>
+              <select id="f-seat" name="seat" required onchange="onSeatSelectChange('f')">
+                <option value="" disabled selected>請先選擇班級</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="f-name"><i class="fa-solid fa-user"></i> 姓名 <span class="req">*</span></label>
+              <input type="text" id="f-name" name="name" placeholder="請填入真實姓名" autocomplete="off" required
+                oninput="onNameInputChange('f')">
+              <div id="f-name-feedback" class="name-verify-feedback hidden"></div>
+            </div>
+            <div class="form-group">
+              <label for="f-contact"><i class="fa-solid fa-comment-dots"></i> 常用聯絡方式 (LINE ID / 手機 / Email) <span
+                  class="req">*</span></label>
+              <input type="text" id="f-contact" name="contact" placeholder="請填入聯絡方式 (LINE ID / 手機)" autocomplete="off"
+                required>
+              <small class="hint">面試通知與錄取名單將透過此管道即時通知你！</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2: 志願組別與職位選擇 (含核心防呆) -->
+        <div class="card form-step-card">
+          <div class="card-header">
+            <div class="card-title-group">
+              <span class="step-num">Step 2</span>
+              <h2>志願組別與職位選擇</h2>
+            </div>
+            <p class="card-subtitle">選擇你最想發光發熱的領域！請注意特定職位的選拔規則 ✨</p>
+          </div>
+
+          <!-- 第一優先志願組別 (單選八大組別) -->
+          <div class="form-group">
+            <label><i class="fa-solid fa-star text-gold"></i> 第一優先志願組別 <span class="req">*</span></label>
+            <div class="departments-grid" id="first-choice-grid">
+              <!-- 總召 -->
+              <label class="dept-radio-card" data-role="leader-only">
+                <input type="radio" name="first_choice" value="總召" required onchange="onFirstChoiceChange('總召')">
+                <div class="dept-content">
+                  <span class="dept-emoji">👑</span>
+                  <span class="dept-name">總召</span>
+                  <span class="dept-tag tag-leader">核心統籌</span>
+                </div>
+              </label>
+              <!-- 副總召 -->
+              <label class="dept-radio-card" data-role="leader-only">
+                <input type="radio" name="first_choice" value="副總召" required onchange="onFirstChoiceChange('副總召')">
+                <div class="dept-content">
+                  <span class="dept-emoji">🌟</span>
+                  <span class="dept-name">副總召</span>
+                  <span class="dept-tag tag-leader">協調督導</span>
+                </div>
+              </label>
+              <!-- 行政 -->
+              <label class="dept-radio-card" data-role="leader-only">
+                <input type="radio" name="first_choice" value="行政" required onchange="onFirstChoiceChange('行政')">
+                <div class="dept-content">
+                  <span class="dept-emoji">📋</span>
+                  <span class="dept-name">行政</span>
+                  <span class="dept-tag tag-leader">會議記錄與公假聯絡</span>
+                </div>
+              </label>
+              <!-- 文宣 -->
+              <label class="dept-radio-card">
+                <input type="radio" name="first_choice" value="文宣" required onchange="onFirstChoiceChange('文宣')">
+                <div class="dept-content">
+                  <span class="dept-emoji">📢</span>
+                  <span class="dept-name">文宣</span>
+                  <span class="dept-tag">宣傳推廣與IG經營</span>
+                </div>
+              </label>
+              <!-- 活動 -->
+              <label class="dept-radio-card">
+                <input type="radio" name="first_choice" value="活動" required onchange="onFirstChoiceChange('活動')">
+                <div class="dept-content">
+                  <span class="dept-emoji">🎉</span>
+                  <span class="dept-name">活動</span>
+                  <span class="dept-tag">主持拍片與活動設計</span>
+                </div>
+              </label>
+              <!-- 美宣 -->
+              <label class="dept-radio-card">
+                <input type="radio" name="first_choice" value="美宣" required onchange="onFirstChoiceChange('美宣')">
+                <div class="dept-content">
+                  <span class="dept-emoji">🎨</span>
+                  <span class="dept-name">美宣</span>
+                  <span class="dept-tag">視覺設計與佈置</span>
+                </div>
+              </label>
+              <!-- 攝媒 -->
+              <label class="dept-radio-card">
+                <input type="radio" name="first_choice" value="攝媒" required onchange="onFirstChoiceChange('攝媒')">
+                <div class="dept-content">
+                  <span class="dept-emoji">📷</span>
+                  <span class="dept-name">攝媒</span>
+                  <span class="dept-tag">影像紀錄與社群</span>
+                </div>
+              </label>
+              <!-- 資訊 -->
+              <label class="dept-radio-card">
+                <input type="radio" name="first_choice" value="資訊" required onchange="onFirstChoiceChange('資訊')">
+                <div class="dept-content">
+                  <span class="dept-emoji">💻</span>
+                  <span class="dept-name">資訊</span>
+                  <span class="dept-tag">官網開發與技術</span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- 欲擔任職位 (連動限制防呆) -->
+          <div class="form-group">
+            <label><i class="fa-solid fa-user-tag"></i> 欲擔任職位 <span class="req">*</span></label>
+
+            <!-- 提示訊息方塊 (當選擇總召/副總召/行政時顯示) -->
+            <div id="position-notice" class="warm-alert-box hidden">
+              <span class="alert-icon">💡</span>
+              <span class="alert-text"><strong>溫馨提示：</strong>您所選擇的志願（<span
+                  id="selected-dept-label">總召</span>）該組別<strong>無組員編制</strong>，系統已為您自動鎖定為「組長」！</span>
+            </div>
+
+            <div class="position-select-row" id="position-options-container">
+              <label class="position-card" id="pos-leader-wrapper">
+                <input type="radio" name="position_role" value="組長" id="pos-leader" required>
+                <div class="pos-card-inner">
+                  <div class="pos-title">👑 組長</div>
+                  <div class="pos-desc">帶領組員推動專題，具備責任感與熱忱</div>
+                </div>
+              </label>
+              <label class="position-card" id="pos-member-wrapper">
+                <input type="radio" name="position_role" value="組員" id="pos-member" required>
+                <div class="pos-card-inner">
+                  <div class="pos-title">🌱 組員</div>
+                  <div class="pos-desc">一同分工執行任務，累積實戰經驗與成果</div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- 其他也可以接受的組別 (可複選) -->
+          <div class="form-group">
+            <label><i class="fa-solid fa-shuffle"></i> 其他也可以接受調配的組別（可多選）</label>
+            <small class="hint">若第一志願人數額滿，願意接受調配的其他組別（選填，若無意願可不勾選）：</small>
+            <div class="alt-dept-chips" id="alt-dept-container">
+              <label class="chip-item">
+                <input type="checkbox" name="alt_choices" value="文宣">
+                <span>📢 文宣組</span>
+              </label>
+              <label class="chip-item">
+                <input type="checkbox" name="alt_choices" value="活動">
+                <span>🎉 活動組</span>
+              </label>
+              <label class="chip-item">
+                <input type="checkbox" name="alt_choices" value="美宣">
+                <span>🎨 美宣組</span>
+              </label>
+              <label class="chip-item">
+                <input type="checkbox" name="alt_choices" value="攝媒">
+                <span>📷 攝媒組</span>
+              </label>
+              <label class="chip-item">
+                <input type="checkbox" name="alt_choices" value="資訊">
+                <span>💻 資訊組</span>
+              </label>
+              <label class="chip-item">
+                <input type="checkbox" name="alt_choices" value="行政">
+                <span>📋 行政組</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3: 經歷、證明與佐證資料 -->
+        <div class="card form-step-card">
+          <div class="card-header">
+            <div class="card-title-group">
+              <span class="step-num">Step 3</span>
+              <h2>相關經歷與佐證資料</h2>
+            </div>
+            <p class="card-subtitle">展示你的超能力！讓我們更深入了解你過去的精彩累積 🌟</p>
+          </div>
+
+          <div class="form-group">
+            <label for="f-experience"><i class="fa-solid fa-trophy"></i> 相關經歷簡介 & 報名動機 <span
+                class="req">*</span></label>
+            <textarea id="f-experience" name="experience" rows="4" placeholder="例如：
+1. 曾擔任過社團社長/股長/活動主辦
+2. 擅長工具（如：Canva, Photoshop, Figma, Python, 影片剪輯...）
+3. 為什麼想加入第七屆專題籌委會？" required></textarea>
+          </div>
+
+          <div class="form-group">
+            <label><i class="fa-solid fa-paperclip"></i> 佐證資料 / 作品集 / 企劃書（檔案直接上傳）</label>
+            <small class="hint">可選取多個檔案，系統將自動依「班級-座號-姓名-1, -2, -3」完成命名並存放至專用雲端空間：</small>
+
+            <!-- 編輯修改模式提示：已上傳佐證資料提醒 -->
+            <div id="existing-file-alert" class="warm-alert-box hidden"
+              style="margin: 10px 0; background: rgba(255, 138, 91, 0.08); border-left: 4px solid var(--accent); padding: 10px 14px; border-radius: 8px;">
+              <span class="alert-icon">📎</span>
+              <span
+                class="alert-text"><strong>已保有上傳之佐證檔案：</strong>若您先前<strong>傳錯檔案想更換</strong>，請直接在下方選取新檔案，送出時系統將自動為您替換舊檔；若不需更換，保持不選即可保留原檔案！</span>
+            </div>
+
+            <!-- 多檔案上傳區 -->
+            <div class="file-upload-container" id="file-dropzone">
+              <input type="file" id="f-file-input" multiple
+                accept=".pdf,.doc,.docx,.ppt,.pptx,.jpg,.jpeg,.png,.zip,.rar" onchange="handleFileSelect(event)"
+                style="display: none;">
+
+              <div class="file-upload-droparea" id="file-droparea"
+                onclick="document.getElementById('f-file-input').click()">
+                <div class="upload-icon-circle">
+                  <i class="fa-solid fa-cloud-arrow-up"></i>
+                </div>
+                <div class="upload-text-group">
+                  <strong>點擊選取檔案</strong> 或將檔案拖曳至此處（支援一次選取多檔）
+                  <span class="upload-hint-sub">支援 PDF、Word、PPT、圖片、ZIP 壓縮檔（各檔案上限 15MB）</span>
+                </div>
+              </div>
+
+              <!-- 已選檔案清單區塊 (多檔案列表) -->
+              <div class="files-list-wrapper hidden" id="files-list-wrapper">
+                <div class="files-list-header">
+                  <span class="files-count-badge">已選取 <strong id="files-count">0</strong> 個檔案</span>
+                  <button type="button" class="btn-add-more" onclick="document.getElementById('f-file-input').click()">
+                    <i class="fa-solid fa-plus"></i> 繼續新增檔案
+                  </button>
+                </div>
+                <div class="files-cards-list" id="files-cards-list">
+                  <!-- 動態由 JavaScript 生成多個檔案卡片 -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 4: 10~11月 培訓與面試時段調查 (各自獨立統計) -->
+        <div class="card form-step-card">
+          <div class="card-header">
+            <div class="card-title-group">
+              <span class="step-num">Step 4</span>
+              <h2>10~11月 培訓與面試時間調查</h2>
+            </div>
+            <p class="card-subtitle">時程安排調查！各時段將各自獨立統計，不用每個都能配合 📅</p>
+          </div>
+
+          <div class="form-group">
+            <label><i class="fa-solid fa-clock text-coral"></i> 10~11月 方便參與之時段（可多選，各自統計） <span
+                class="req">*</span></label>
+            <small class="hint">⏰ 請勾選您可以出席的時段（不用都要配合，有空的時間直接勾選即可，籌委會將各自統計安排）：</small>
+
+            <div class="interview-slots-grid">
+              <label class="slot-checkbox">
+                <input type="checkbox" name="time_slots" value="平日中午 (12:30~13:10)">
+                <div class="slot-box">
+                  <span class="slot-tag">平日中午</span>
+                  <span class="slot-time">12:30 ~ 13:10</span>
+                  <span class="slot-note">每週定期小組會議與核心培訓</span>
+                </div>
+              </label>
+
+              <label class="slot-checkbox">
+                <input type="checkbox" name="time_slots" value="自主學習時間">
+                <div class="slot-box">
+                  <span class="slot-tag">自主學習</span>
+                  <span class="slot-time">配合學校自學排課時段</span>
+                  <span class="slot-note">專題實戰操作與小組輔導交流</span>
+                </div>
+              </label>
+
+              <label class="slot-checkbox">
+                <input type="checkbox" name="time_slots" value="平日放學時段 (17:15~18:00)">
+                <div class="slot-box">
+                  <span class="slot-tag">平日放學</span>
+                  <span class="slot-time">17:15 ~ 18:00</span>
+                  <span class="slot-note">放學短暫面談或彈性討論</span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- 給第七屆籌委會的話 -->
+          <div class="form-group">
+            <label for="f-notes"><i class="fa-solid fa-heart-pulse text-coral"></i> 給第七屆專題籌委會的一句話 / 期望或問題</label>
+            <textarea id="f-notes" name="notes" rows="2" placeholder="例：期待跟大家一起把第七屆專題辦得超盛大！希望能學到更多團隊合作經驗 ✨"></textarea>
+          </div>
+        </div>
+
+        <!-- 報名提醒：加入官方 LINE 群組 -->
+        <div class="line-submit-notice">
+          <div class="line-notice-icon"><i class="fa-brands fa-line"></i></div>
+          <div class="line-notice-content">
+            <strong>📢 報名提醒：送出後請務必加入官方 LINE 群組！</strong>
+            <p>請點選加入「7th 專題籌備委員會」社群，方便委員會後續通知面試時程、公布名單與籌備聯絡事宜。</p>
+          </div>
+          <a href="https://line.me/ti/g2/el2z3XrT-3KD_LqV-qiLxFGWi6q7VnfdjmQWag?utm_source=invitation&utm_medium=link_copy&utm_campaign=default"
+            target="_blank" rel="noopener noreferrer" class="btn btn-line-sm">
+            <i class="fa-brands fa-line"></i> 預先加入群組
+          </a>
+        </div>
+
+        <!-- 提交按鈕區 -->
+        <div class="submit-action-area">
+          <button type="submit" class="btn btn-submit" id="btn-submit">
+            <span class="btn-text" id="submit-btn-text">
+              <i class="fa-solid fa-paper-plane"></i> 確認送出報名表
+            </span>
+            <span class="btn-spinner hidden" id="submit-spinner">
+              <i class="fa-solid fa-circle-notch fa-spin"></i> 正在傳送熱情到籌委會...🐾
+            </span>
+          </button>
+          <p class="submit-subtext">送出後隨時可以使用「查詢 / 修改已填資料」進行更新喔！</p>
+        </div>
+      </form>
+    </section>
+
+    <!-- 區塊 3: 八大組別詳細介紹 (點擊切換分頁) -->
+    <section id="info-section" class="card info-container hidden">
+      <div class="card-header text-center">
+        <div class="card-title-group center">
+          <span class="card-icon">🌈</span>
+          <h2>第七屆專題籌備委員會 八大組別介紹</h2>
+        </div>
+        <p class="card-subtitle">每一個組別都是不可或缺的齒輪，找到最適合你的專屬舞台！</p>
+      </div>
+
+      <div class="dept-intro-grid">
+        <div class="dept-intro-card">
+          <div class="dept-intro-header header-gold">
+            <span class="d-emoji">👑</span>
+            <h3>總召組</h3>
+            <span class="dept-badge">組長 (無組員編制)</span>
+          </div>
+          <p>專題委員會最高負責人，統籌全盤進度、跨組協調溝通、主持全體大會與指導老師對接。</p>
+        </div>
+
+        <div class="dept-intro-card">
+          <div class="dept-intro-header header-orange">
+            <span class="d-emoji">🌟</span>
+            <h3>副總召組</h3>
+            <span class="dept-badge">組長 (無組員編制)</span>
+          </div>
+          <p>協助總召督導各組進度、掌握風險與備案、主責內部氣氛凝聚與危機處理。</p>
+        </div>
+
+        <div class="dept-intro-card">
+          <div class="dept-intro-header header-blue">
+            <span class="d-emoji">📋</span>
+            <h3>行政組</h3>
+            <span class="dept-badge">組長 (無組員編制)</span>
+          </div>
+          <p>主責大會會議記錄撰寫、幹部公假申請辦理，以及與指導教師對接聯絡。</p>
+        </div>
+
+        <div class="dept-intro-card">
+          <div class="dept-intro-header">
+            <span class="d-emoji">📢</span>
+            <h3>文宣組</h3>
+            <span class="dept-badge">組長 / 組員</span>
+          </div>
+          <p>主責官方宣傳推廣、官方 IG 帳號經營、宣傳文稿撰寫與社群圖文企劃。</p>
+        </div>
+
+        <div class="dept-intro-card">
+          <div class="dept-intro-header">
+            <span class="d-emoji">🎉</span>
+            <h3>活動組</h3>
+            <span class="dept-badge">組長 / 組員</span>
+          </div>
+          <p>主責專題發表會流程規劃、現場串場主持、宣傳短影音拍片企劃，以及各項精彩活動與破冰設計。</p>
+        </div>
+
+        <div class="dept-intro-card">
+          <div class="dept-intro-header">
+            <span class="d-emoji">🎨</span>
+            <h3>美宣組</h3>
+            <span class="dept-badge">組長 / 組員</span>
+          </div>
+          <p>打造第七屆專屬主視覺、宣傳海報、邀請卡、周邊紀念品與實體展場佈置規劃。</p>
+        </div>
+
+        <div class="dept-intro-card">
+          <div class="dept-intro-header">
+            <span class="d-emoji">📷</span>
+            <h3>攝媒組</h3>
+            <span class="dept-badge">組長 / 組員</span>
+          </div>
+          <p>全期攝影/錄影側拍、精華短片剪輯、經營官方社群 (IG/FB) 與即時宣傳曝光。</p>
+        </div>
+
+        <div class="dept-intro-card">
+          <div class="dept-intro-header">
+            <span class="d-emoji">💻</span>
+            <h3>資訊組</h3>
+            <span class="dept-badge">組長 / 組員</span>
+          </div>
+          <p>開發維護專題展覽官方網站、線上投票/互動系統、報名系統整合與技術支援。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 頁尾宣告 -->
+    <footer class="site-footer">
+      <p>© 第七屆專題籌備委員會 7th Project Committee ｜ 一起打造最棒的專題展覽 🌟</p>
+    </footer>
+  </div>
+
+  <!-- 成功彈出視窗 (Modal) -->
+  <div id="success-modal" class="modal-overlay hidden">
+    <div class="modal-card animate-pop">
+      <div class="modal-cute-mascot">🎉🥳✨</div>
+      <h3 class="modal-title" id="modal-title-text">報名資料已成功送出！</h3>
+      <p class="modal-desc" id="modal-desc-text">
+        太棒了！我們已經收到你的熱情申請囉！<br>
+        資料已即時寫入 Google Sheet 資料庫 💌
+      </p>
+
+      <div class="modal-summary-grid">
+        <div class="summary-chip">
+          <span class="s-label">報名學生</span>
+          <strong id="summary-student-name" class="s-val">-</strong>
+        </div>
+        <div class="summary-chip">
+          <span class="s-label">第一志願</span>
+          <strong id="summary-dept-choice" class="s-val text-coral">-</strong>
+        </div>
+        <div class="summary-chip">
+          <span class="s-label">欲任職位</span>
+          <strong id="summary-position-role" class="s-val">-</strong>
+        </div>
+        <div class="summary-chip">
+          <span class="s-label">更新時間</span>
+          <span id="summary-timestamp" class="s-val">-</span>
+        </div>
+      </div>
+
+      <!-- LINE 官方聯絡群組加入引導（核心重點） -->
+      <div class="line-join-card">
+        <div class="line-join-header-row">
+          <span class="line-badge"><i class="fa-brands fa-line"></i> 官方聯絡群組</span>
+          <h4 class="line-join-title">📢 報名完成！請務必加入社群</h4>
+        </div>
+
+        <p class="line-join-desc">
+          您已被邀請加入<strong>「7th 專題籌備委員會」</strong>！請加入社群，<strong>方便後續通知面試時程與進行聯絡</strong>！
+        </p>
+
+        <div class="line-join-body">
+          <div class="line-qr-box">
+            <img src="line-community-qr.jpg" alt="7th 專題籌備委員會 LINE 社群 QR Code" class="line-qr-img">
+            <span class="line-qr-hint"><i class="fa-solid fa-qrcode"></i> 手機掃描即可加入</span>
+          </div>
+
+          <div class="line-join-actions">
+            <a href="https://line.me/ti/g2/el2z3XrT-3KD_LqV-qiLxFGWi6q7VnfdjmQWag?utm_source=invitation&utm_medium=link_copy&utm_campaign=default"
+              target="_blank" rel="noopener noreferrer" class="btn btn-line-primary">
+              <i class="fa-brands fa-line"></i> 點我立即加入 LINE 社群
+            </a>
+            <button type="button" class="btn btn-line-secondary" onclick="copyLineInviteUrl()">
+              <i class="fa-regular fa-copy"></i> 複製社群邀請連結
+            </button>
+            <div class="line-safe-notice">
+              <i class="fa-solid fa-shield-halved"></i> LINE OpenChat 匿名社群，可安心加入交流
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn btn-modal-primary" onclick="closeSuccessModal()">
+          <i class="fa-solid fa-thumbs-up"></i> 太好了，我知道了！
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 未在名冊中確認送出 Modal (轉學生/名冊異動相容機制) -->
+  <div id="unlisted-modal" class="modal-overlay hidden" role="dialog" aria-modal="true"
+    aria-labelledby="unlisted-modal-title">
+    <div class="modal-card" style="max-width: 520px;">
+      <div class="modal-cute-mascot" style="font-size: 38px;">📋🔍</div>
+      <h3 class="modal-title" id="unlisted-modal-title" style="color: #D97706;">未在預設名冊中提醒</h3>
+      <p class="modal-desc"
+        style="color: #4B5563; font-size: 13.5px; line-height: 1.6; text-align: left; margin: 12px 0 16px;">
+        親愛的同學您好：<br>
+        系統在目前的名冊中未查得您的身分資料（可能是<strong>轉學生、復學生、近期座號調整或名單更動中</strong>）。<br><br>
+        <strong>您依然可以正常送出報名！</strong> 籌委會將為您進行人工核對並建檔。<br>
+        請再次確認以下所填寫的資料是否正確：
+      </p>
+
+      <div class="modal-summary-grid"
+        style="grid-template-columns: 1fr 1fr; margin-bottom: 18px; border-color: #FDE68A; background: #FFFBEB;">
+        <div class="summary-chip">
+          <span class="s-label">報名班級</span>
+          <span class="s-val" id="u-modal-class">-</span>
+        </div>
+        <div class="summary-chip">
+          <span class="s-label">報名座號</span>
+          <span class="s-val" id="u-modal-seat">-</span>
+        </div>
+        <div class="summary-chip" style="grid-column: span 2;">
+          <span class="s-label">學生姓名</span>
+          <span class="s-val" id="u-modal-name" style="color: #B45309; font-size: 15px;">-</span>
+        </div>
+      </div>
+
+      <div class="modal-actions-row" style="display: flex; gap: 10px;">
+        <button type="button" class="btn btn-secondary" style="flex: 1; padding: 11px 16px;"
+          onclick="closeUnlistedModal()">
+          <i class="fa-solid fa-pen"></i> 返回修改
+        </button>
+        <button type="button" class="btn btn-modal-primary"
+          style="flex: 1.2; padding: 11px 16px; background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);"
+          onclick="confirmUnlistedSubmit()">
+          <i class="fa-solid fa-paper-plane"></i> 確認無誤，確定送出
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Google Apps Script URL 設定 Modal (僅供管理者自訂後端) -->
+  <div id="gas-modal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header-simple">
+        <h3><i class="fa-solid fa-cloud-arrow-up"></i> 後端 API 網址設定</h3>
+        <button class="close-btn" onclick="closeGasSettingsModal()">&times;</button>
+      </div>
+
+      <p class="text-muted" style="margin-top: 10px;">
+        Google Apps Script <strong>Web 應用程式網址 (Web App URL)</strong>：
+      </p>
+      <div class="form-group" style="margin: 12px 0;">
+        <input type="text" id="gas-url-input" placeholder="https://script.google.com/macros/s/.../exec">
+      </div>
+      <div class="modal-actions-row">
+        <button type="button" class="btn btn-secondary" onclick="resetGasUrl()">恢復預設網址</button>
+        <button type="button" class="btn btn-primary" onclick="saveGasUrl()">儲存設定</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 全站常駐 LINE 官方聯絡群組浮動按鈕 -->
+  <aside class="line-floating-widget" id="line-floating-widget" aria-label="LINE 官方聯絡群組">
+    <div class="line-fab-popover hidden" id="line-fab-popover">
+      <div class="popover-header">
+        <span class="p-badge"><i class="fa-brands fa-line"></i> 官方聯絡群組</span>
+        <button type="button" class="p-close" onclick="toggleLineFab()">&times;</button>
+      </div>
+      <div class="popover-body">
+        <img src="line-community-qr.jpg" alt="7th 專題籌備委員會 QR Code" class="popover-qr">
+        <div class="popover-desc">
+          <strong>7th 專題籌備委員會</strong>
+          <p>報名請務必加入群組，方便後續通知與進行聯絡！</p>
+        </div>
+        <a href="https://line.me/ti/g2/el2z3XrT-3KD_LqV-qiLxFGWi6q7VnfdjmQWag?utm_source=invitation&utm_medium=link_copy&utm_campaign=default"
+          target="_blank" rel="noopener noreferrer" class="btn btn-line-primary btn-block">
+          <i class="fa-brands fa-line"></i> 點我加入 LINE 社群
+        </a>
+        <button type="button" class="btn btn-line-secondary btn-block" onclick="copyLineInviteUrl()">
+          <i class="fa-regular fa-copy"></i> 複製邀請連結
+        </button>
+      </div>
+    </div>
+    <button type="button" class="line-fab-btn" id="line-fab-btn" onclick="toggleLineFab()"
+      title="加入 7th 專題籌備委員會 LINE 群組">
+      <i class="fa-brands fa-line"></i>
+      <span class="fab-badge-text">聯絡群組</span>
+    </button>
+  </aside>
+
+  <!-- Toast 訊息通知 -->
+  <div id="toast" class="toast hidden"></div>
+
+  <!-- 應用程式邏輯（完全不包含學生個資，個資核對由雲端安全後端進行） -->
+  <script src="app.js"></script>
+</body>
+
+</html>

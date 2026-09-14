@@ -1,0 +1,15 @@
+# 敏感個資檔案（嚴格禁止上傳至 Git 或公開網路）
+*.xlsx
+*.xls
+*.csv
+students-data.js
+students-data*.js
+*名冊*
+*名單*
+
+# 編輯器與暫存檔
+.vscode/
+.idea/
+*.log
+.DS_Store
+Thumbs.db
